@@ -19,8 +19,6 @@ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Labore neque maxime un
   * [fun rando Links and stuff](#fun-rando-links-and-stuff)
   * [201: Hello](#201-hello)
   * [202: World](#202-world)
-  * [201: Hello](#201-hello-1)
-  * [202: World](#202-world-1)
 - [Goodbye for now](#goodbye-for-now)
   * [Footnotes](#footnotes)
 
@@ -87,12 +85,6 @@ Hello
 ### 202: World
 
 World 
-### 201: Hello
-
-Hello
-### 202: World
-
-World
 ## Goodbye for now
 
 
