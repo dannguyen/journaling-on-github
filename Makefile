@@ -2,7 +2,7 @@
 
 ARTICLES_DIR = articles
 
-PUBLISH_DIR = _publish
+PUBLISH_DIR = docs
 
 
 .PHONY : clean help $(ARTICLES_DIR)
