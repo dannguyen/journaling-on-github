@@ -2,6 +2,8 @@
 
 ARTICLES_DIR = articles
 
+PUBLISH_DIR = _publish
+
 
 .PHONY : clean help $(ARTICLES_DIR)
 
@@ -9,8 +11,30 @@ ARTICLES_DIR = articles
 help:
 	@echo 'Run `make ALL` to see how things run from scratch'
 
-compile: articles/sample-article/index.md
 
+
+## publishing
+# $(PUBLISH_DIR)/%.html : $(ARTICLES_DIR) $(PUBLISH_DIR)
+# 	mkdir -p $(PUBLISH_DIR)/assets
+
+publish:
+	# todo:
+	# - use rsync obviously
+	# - rewrite assets paths? or no need?
+	find $(ARTICLES_DIR) -name 'index.md' | sort | while read -r idxname; do \
+		echo "Processing $$idxname"; \
+		srcdir=$$(dirname $$idxname); \
+		bdname=$$(basename $$srcdir); \
+		targetdir=$(PUBLISH_DIR)/$$bdname; \
+		echo "Creating $$targetdir"; \
+		mkdir -p $$targetdir; \
+		if [[ -d "$$srcdir/assets" ]]; then cp -r $$srcdir/assets $$targetdir/assets; fi; \
+		target=$$targetdir/index.html; \
+		pandoc -f markdown -t html -o $$target $$idxname; \
+	done
+
+
+## compilation:
 
 $(ARTICLES_DIR)/%index.md :  $(ARTICLES_DIR)
 	rm -f $(@)
