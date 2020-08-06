@@ -19,7 +19,7 @@ $(ARTICLES_DIR)/%index.md :  $(ARTICLES_DIR)
 
 
 define foo-build-article =
-find $(dir $@). -name '*.md' ! -name "pattern_B"| sort | while read -r fname; do cat $$fname >> $@; done
+find $(dir $@). -name '*.md' -not -name "_*.md" | sort | while read -r fname; do cat $$fname >> $@; done
 endef
 
 define foo-insert-article-toc=

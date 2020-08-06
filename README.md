@@ -5,17 +5,22 @@ A repo set up to do some quick lightweight journaling on Github, using primarily
 
 ## How to use/build
 
-Given an article directory like [articles/easy-example](articles/easy-example) or [articles/complex-example](articles/complex-example), running the following make command:
+Given an article directory like [articles/easy-sample](articles/easy-sample) or [articles/complex-sample](articles/complex-sample), running the following make command:
 
 ```sh
-$ make articles/complex-example/index.md
+$ make articles/complex-sample/index.md
 ```
 
-Will produce a `index.md` that is a result of concatenating all the markdown files in articles/SUBDIRECTORY, e.g [articles/easy-example/index.md](articles/easy-example/index.md) and [articles/complex-example/index.md](articles/complex-example/index.md)
+Will produce a `index.md` that is a result of concatenating all the markdown files in articles/SUBDIRECTORY, e.g
+
+- [articles/easy-sample/index.md](articles/easy-sample/index.md)  
+- [articles/complex-sample/index.md](articles/complex-sample/index.md)
 
 
 
 ## Article subdirectory structure
+
+How to structure the files in an article subdirectory
 
 ### Simple example
 
