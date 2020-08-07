@@ -1,9 +1,8 @@
 .DEFAULT_GOAL := help
 
 ARTICLES_SOURCE_DIR = articles
-
 PUBLISH_BUILD_DIR = docs/articles
-
+REPO_SLUG = 'dannguyen/journaling-on-github'
 
 .PHONY : clean help $(ARTICLES_SOURCE_DIR)
 
@@ -22,7 +21,7 @@ clean:
 # 	mkdir -p $(PUBLISH_DIR)/assets
 
 publish:
-	./scripts/publish_articles.py $(ARTICLES_SOURCE_DIR) $(PUBLISH_BUILD_DIR)
+	./scripts/publish_articles.py $(ARTICLES_SOURCE_DIR) $(PUBLISH_BUILD_DIR) $(REPO_SLUG)
 # 	# todo:
 # 	# - use rsync obviously
 # 	# - rewrite assets paths? or no need?

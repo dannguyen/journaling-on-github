@@ -125,7 +125,7 @@ def publish_article(src_path, publish_dir):
     return article_meta
 
 
-def publish_index(article_metas, target_dir):
+def publish_index(article_metas, target_dir, repo_user, repo_name):
     """
     article_metas is a list of dicts
 
@@ -133,18 +133,38 @@ def publish_index(article_metas, target_dir):
 
     Result: index webpage written to target_dir/index.html
     """
-    metas = article_metas.copy()
-    for m in metas:
-        m['path'] = str(Path(m['path']).relative_to(target_dir))
+    def _site_base_url():
+        """not sure if this is needed"""
+        nonlocal repo_user, repo_name
+        return f"https://{repo_user}.github.io/{repo_name}"
 
-    target_path = target_dir.joinpath('index.html')
+    def _get_target_path():
+        """
+        can't do github.io/myreponame and expect it to redirect to github.io/myreponame/index.html
 
-    html = Template(MAIN_INDEX_TEMPLATE).render(articles=metas, page_path=target_path.relative_to(target_dir))
+        Instead, we name the file: github.io/myreponame.html
+        """
+        nonlocal target_dir, repo_name
+        target_path = target_dir.joinpath(f'{repo_name}.html')
+        return target_path
 
-    target_path.write_text(html)
+    def _fix_metas():
+        nonlocal article_metas, target_dir
+        x = article_metas.copy()
+        for m in x:
+            m['path'] = str(Path(m['path']).relative_to(target_dir))
+        return x
+
+    metas = _fix_metas()
+    html = Template(MAIN_INDEX_TEMPLATE).render(articles=metas, page_path=_site_base_url())
+
+    targetpath = _get_target_path()
+    targetpath.write_text(html)
+
+    return targetpath
 
 
-def publish(articles_dir, publish_dir):
+def publish(articles_dir, publish_dir, repo_user, repo_name):
 
     artpaths = articles_dir.glob('**/index.md')
     metas = []
@@ -152,14 +172,16 @@ def publish(articles_dir, publish_dir):
         artmeta = publish_article(src_article_path, publish_dir)
         metas.append(artmeta)
 
-    publish_index(metas, publish_dir.parent)
+    publish_index(metas, publish_dir.parent, repo_user, repo_name)
 
 def main():
-    srcdir, targdir = [Path(p) for p in argv[1:3]]
+    srcdir, targdir, repo = argv[1:4]
     mylog(f"{srcdir}", label="Source dir")
     mylog(f"{targdir}", label="Target dir")
+    mylog(f"{repo}", label="Repo path")
+    repo_user, repo_name = repo.split('/')
 
-    publish(srcdir, targdir)
+    publish(Path(srcdir), Path(targdir), repo_user, repo_name)
 
 
 if __name__ == '__main__':
