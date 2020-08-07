@@ -1,0 +1,7 @@
+pytest
+PyYaml>=5.1
+cssselect
+jinja2
+lxml
+requests>=2.0
+rich

@@ -1,7 +1,11 @@
 # journaling-on-github
 
 
-A repo set up to do some quick lightweight journaling on Github, using primarily github flavored Markdown
+A repo set up to do some quick lightweight journaling on Github, using primarily github flavored Markdown.
+
+See example index of produced articles as published on Github Pages: 
+
+[https://dannguyen.github.io/journaling-on-github/](https://dannguyen.github.io/journaling-on-github/)
 
 ## How to use/build
 

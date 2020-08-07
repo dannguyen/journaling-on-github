@@ -1,42 +1,48 @@
 .DEFAULT_GOAL := help
 
-ARTICLES_DIR = articles
+ARTICLES_SOURCE_DIR = articles
 
-PUBLISH_DIR = docs
+PUBLISH_BUILD_DIR = docs/articles
 
 
-.PHONY : clean help $(ARTICLES_DIR)
+.PHONY : clean help $(ARTICLES_SOURCE_DIR)
 
 
 help:
 	@echo 'Run `make ALL` to see how things run from scratch'
 
 
+clean:
+	@echo "Clean out $(PUBLISH_BUILD_DIR)"
+	if [[ -d "$(PUBLISH_BUILD_DIR)" ]]; then rm -r $(PUBLISH_BUILD_DIR); fi
+
 
 ## publishing
-# $(PUBLISH_DIR)/%.html : $(ARTICLES_DIR) $(PUBLISH_DIR)
+# $(PUBLISH_DIR)/%.html : $(ARTICLES_SOURCE_DIR) $(PUBLISH_DIR)
 # 	mkdir -p $(PUBLISH_DIR)/assets
 
 publish:
-	# todo:
-	# - use rsync obviously
-	# - rewrite assets paths? or no need?
-	find $(ARTICLES_DIR) -name 'index.md' | sort | while read -r idxname; do \
-		echo "Processing $$idxname"; \
-		srcdir=$$(dirname $$idxname); \
-		bdname=$$(basename $$srcdir); \
-		targetdir=$(PUBLISH_DIR)/$$bdname; \
-		echo "Creating $$targetdir"; \
-		mkdir -p $$targetdir; \
-		if [[ -d "$$srcdir/assets" ]]; then cp -r $$srcdir/assets $$targetdir/assets; fi; \
-		target=$$targetdir/index.html; \
-		pandoc -f markdown -t html -o $$target $$idxname; \
-	done
+	./scripts/publish_articles.py $(ARTICLES_SOURCE_DIR) $(PUBLISH_BUILD_DIR)
+# 	# todo:
+# 	# - use rsync obviously
+# 	# - rewrite assets paths? or no need?
+# 	find $(ARTICLES_SOURCE_DIR) -name 'index.md' | sort | while read -r idxname; do \
+# 		echo "Processing $$idxname"; \
+# 		srcdir=$$(dirname $$idxname); \
+# 		bdname=$$(basename $$srcdir); \
+# 		targetdir=$(PUBLISH_BUILD_DIR)/$$bdname; \
+# 		echo "Creating $$targetdir"; \
+# 		mkdir -p $$targetdir; \
+# 		if [[ -d "$$srcdir/assets" ]]; then cp -r $$srcdir/assets $$targetdir/assets; fi; \
+# 		target=$$targetdir/index.html; \
+# 		pandoc -f markdown -t html $$idxname | ./scripts/publish_html.py > $$target ;\
+# 	done
+# #		pandoc -f markdown -t html -o $$target $$idxname; \
 
 
 ## compilation:
 
-$(ARTICLES_DIR)/%index.md :  $(ARTICLES_DIR)
+$(ARTICLES_SOURCE_DIR)/%index.md :  $(ARTICLES_SOURCE_DIR)
 	rm -f $(@)
 	$(foo-build-article)
 	$(foo-insert-article-toc)
@@ -50,9 +56,6 @@ define foo-insert-article-toc=
 [ -e "$(@)" ] && markdown-toc -i "$(@)" || -1
 endef
 
-
-clean:
-	@echo "Should clean out ./docs"
 
 
 # F--K bash variables and conditionals!!!
